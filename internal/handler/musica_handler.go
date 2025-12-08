@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	model "github.com/estrelandoana/api-golang-treino/internal/entity"
+	entity "github.com/estrelandoana/api-golang-treino/internal/entity"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
 
-var musicas = []model.Musica{
+var musicas = []entity.Musica{
 	{
 		ID:      "1",
 		Titulo:  "Nome da musica",
@@ -27,7 +27,7 @@ func ListarMusicas(w http.ResponseWriter, r *http.Request) {
 } //listar
 
 func CreateMusica(w http.ResponseWriter, r *http.Request) {
-	var novaMusica model.Musica
+	var novaMusica entity.Musica
 	err := json.NewDecoder(r.Body).Decode(&novaMusica)
 	if err != nil {
 		http.Error(w, "Dados inválidos", http.StatusBadRequest)
@@ -42,7 +42,6 @@ func CreateMusica(w http.ResponseWriter, r *http.Request) {
 func GetMusica(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-
 	for _, musica := range musicas {
 		if musica.ID == id {
 			w.Header().Set("Content-Type", "application/json")
@@ -51,4 +50,38 @@ func GetMusica(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	http.Error(w, "Musica nao encontrada", http.StatusNotFound)
+}
+
+func UpdateMusica(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	var musicaAtualizada entity.Musica
+	err := json.NewDecoder(r.Body).Decode(&musicaAtualizada)
+	if err != nil {
+		http.Error(w, "Dados inválidos", http.StatusBadRequest)
+		return
+	}
+	for i, musica := range musicas {
+		if musica.ID == id {
+			musicaAtualizada.ID = id
+			musicas[i] = musicaAtualizada
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(musicaAtualizada)
+			return
+		}
+	}
+	http.Error(w, "Música não encontrada", http.StatusNotFound)
+}
+
+func DeleteMusica(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	for i, musica := range musicas {
+		if musica.ID == id {
+			musicas = append(musicas[:i], musicas[i+1:]...)
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+	}
+	http.Error(w, "Música não encontrada", http.StatusNotFound)
 }
