@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/estrelandoana/api-golang-treino/internal/model"
+	model "github.com/estrelandoana/api-golang-treino/internal/entity"
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 )
