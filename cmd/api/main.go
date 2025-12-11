@@ -4,11 +4,15 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/estrelandoana/api-golang-treino/internal/db"
+	"github.com/estrelandoana/api-golang-treino/internal/entity"
 	"github.com/estrelandoana/api-golang-treino/internal/handler"
 	"github.com/gorilla/mux"
 )
 
 func main() {
+	db.ConectorDB()
+	db.DB.AutoMigrate(&entity.Musica{})
 	r := mux.NewRouter() //cria um roteador
 
 	r.HandleFunc("/musicas", handler.ListarMusicas).Methods("GET")
