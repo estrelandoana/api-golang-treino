@@ -1,7 +1,7 @@
 package entity
 
 type Musica struct {
-	ID      string `json:"id"`
+	ID      uint   `gorm:"primaryKey"`
 	Titulo  string `json:"titulo"`
 	Artista string `json:"artista"`
 	Album   string `json:"album"`

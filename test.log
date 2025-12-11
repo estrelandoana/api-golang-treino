@@ -1,0 +1,4 @@
+# github.com/estrelandoana/api-golang-treino/internal/handler [github.com/estrelandoana/api-golang-treino/internal/handler.test]
+internal/handler/musica_handler_test.go:16:5: undefined: db.ConectarDB
+FAIL	github.com/estrelandoana/api-golang-treino/internal/handler [build failed]
+FAIL

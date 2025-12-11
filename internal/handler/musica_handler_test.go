@@ -1,30 +1,35 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"strings"
 	"testing"
 
+	"github.com/estrelandoana/api-golang-treino/internal/db"
 	entity "github.com/estrelandoana/api-golang-treino/internal/entity"
 	"github.com/gorilla/mux"
 )
 
-func musicaDemo() []entity.Musica {
-	return []entity.Musica{
-		{
-			ID:      "1",
-			Titulo:  "Nome da musica",
-			Artista: "Artista da musica",
-			Album:   "Album da musica",
-			Ano:     2022,
-			Genero:  "Genero da musica",
-			Duracao: 30,
-		},
-	}
+func TestMain(m *testing.M) {
+	db.ConectorDB()
+	db.DB.AutoMigrate(&entity.Musica{})
+	code := m.Run()
+	os.Exit(code)
 }
+
 func TestListarMusicas(t *testing.T) {
-	musicas = musicaDemo()
+	db.DB.Exec("DELETE FROM musicas")
+	db.DB.Create(&entity.Musica{
+		Titulo:  "Nome da musica",
+		Artista: "Artista da musica",
+		Album:   "Album da musica",
+		Ano:     2022,
+		Genero:  "Genero da musica",
+		Duracao: 30,
+	})
 	req, err := http.NewRequest("GET", "/musicas", nil)
 	if err != nil {
 		t.Fatal(err)
@@ -41,7 +46,7 @@ func TestListarMusicas(t *testing.T) {
 }
 
 func TestCreateMusica(t *testing.T) {
-	musicas = musicaDemo()
+	db.DB.Exec("DELETE FROM musicas")
 	body := `{"titulo":"TituloTeste","artista":"ArtistaTeste","album":"AlbumTeste","ano":2017,"genero":"GeneroTeste","duracao":8}`
 	req, err := http.NewRequest("POST", "/musicas", strings.NewReader(body))
 	if err != nil {
@@ -59,8 +64,17 @@ func TestCreateMusica(t *testing.T) {
 }
 
 func TestGetMusica(t *testing.T) {
-	musicas = musicaDemo()
-	req, err := http.NewRequest("GET", "/musicas/1", nil)
+	db.DB.Exec("DELETE FROM musicas")
+	musica := entity.Musica{
+		Titulo:  "Nome da musica",
+		Artista: "Artista da musica",
+		Album:   "Album da musica",
+		Ano:     2022,
+		Genero:  "Genero da musica",
+		Duracao: 30,
+	}
+	db.DB.Create(&musica)
+	req, err := http.NewRequest("GET", "/musicas/"+fmt.Sprint(musica.ID), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -74,9 +88,18 @@ func TestGetMusica(t *testing.T) {
 }
 
 func TestUpdateMusica(t *testing.T) {
-	musicas = musicaDemo()
+	db.DB.Exec("DELETE FROM musicas")
+	musica := entity.Musica{
+		Titulo:  "Nome da musica",
+		Artista: "Artista da musica",
+		Album:   "Album da musica",
+		Ano:     2022,
+		Genero:  "Genero da musica",
+		Duracao: 30,
+	}
+	db.DB.Create(&musica)
 	body := `{"titulo":"TituloTeste","artista":"ArtistaTeste","album":"AlbumTeste","ano":2017,"genero":"GeneroTeste","duracao":8}`
-	req, err := http.NewRequest("PUT", "/musicas/1", strings.NewReader(body))
+	req, err := http.NewRequest("PUT", "/musicas/"+fmt.Sprint(musica.ID), strings.NewReader(body))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -90,8 +113,17 @@ func TestUpdateMusica(t *testing.T) {
 }
 
 func TestDeleteMusica(t *testing.T) {
-	musicas = musicaDemo()
-	req, err := http.NewRequest("DELETE", "/musicas/1", nil)
+	db.DB.Exec("DELETE FROM musicas")
+	musica := entity.Musica{
+		Titulo:  "Nome da musica",
+		Artista: "Artista da musica",
+		Album:   "Album da musica",
+		Ano:     2022,
+		Genero:  "Genero da musica",
+		Duracao: 30,
+	}
+	db.DB.Create(&musica)
+	req, err := http.NewRequest("DELETE", "/musicas/"+fmt.Sprint(musica.ID), nil)
 	if err != nil {
 		t.Fatal(err)
 	}
