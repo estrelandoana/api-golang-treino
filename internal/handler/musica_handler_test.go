@@ -80,7 +80,7 @@ func TestGetMusica(t *testing.T) {
 	}
 	rr := httptest.NewRecorder()
 	router := mux.NewRouter()
-	router.HandleFunc("/musicas/{id}", GetMusica).Methods("GET")
+	router.HandleFunc("/musicas/{id}", GinGetMusica).Methods("GET")
 	router.ServeHTTP(rr, req)
 	if status := rr.Code; status != http.StatusOK {
 		t.Errorf("Expectativa: status 200, obtido: %v", status)

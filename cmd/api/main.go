@@ -1,26 +1,22 @@
 package main
 
 import (
-	"log"
-	"net/http"
-
 	"github.com/estrelandoana/api-golang-treino/internal/db"
-	"github.com/estrelandoana/api-golang-treino/internal/entity"
 	"github.com/estrelandoana/api-golang-treino/internal/handler"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	db.ConectorDB()
-	db.DB.AutoMigrate(&entity.Musica{})
-	r := mux.NewRouter()
+	r := gin.Default()
 
-	r.HandleFunc("/musicas", handler.ListarMusicas).Methods("GET")
-	r.HandleFunc("/musicas", handler.CreateMusica).Methods("POST")
-	r.HandleFunc("/musicas/{id}", handler.GetMusica).Methods("GET")
-	r.HandleFunc("/musicas/{id}", handler.UpdateMusica).Methods("PUT")
-	r.HandleFunc("/musicas/{id}", handler.DeleteMusica).Methods("DELETE")
-
-	log.Println("Servidor porta 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	api := r.Group("/api/v1")
+	{
+		api.GET("/musicas", handler.GinListarMusicas)
+		api.POST("/musicas", handler.GinCreateMusica)
+		api.GET("/musicas/:id", handler.GinGetMusica)
+		api.PUT("/musicas/:id", handler.GinUpdateMusica)
+		api.DELETE("/musicas/:id", handler.GinDeleteMusica)
+	}
+	r.Run(":8080")
 }
