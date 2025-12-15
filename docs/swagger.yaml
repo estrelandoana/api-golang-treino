@@ -1,0 +1,135 @@
+basePath: /api/v1
+definitions:
+  entity.Musica:
+    properties:
+      album:
+        type: string
+      ano:
+        type: integer
+      artista:
+        type: string
+      duracao:
+        type: integer
+      genero:
+        type: string
+      id:
+        type: integer
+      titulo:
+        type: string
+    type: object
+  handler.Response:
+    properties:
+      data: {}
+      erro: {}
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API REST para gerenciamento de músicas.
+  title: API de Músicas (Ana)
+  version: "1.0"
+paths:
+  /musicas:
+    get:
+      description: Retorna todas as músicas cadastradas
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Lista todas as músicas
+      tags:
+      - musicas
+    post:
+      consumes:
+      - application/json
+      description: Criação de uma nova música
+      parameters:
+      - description: Música para criar
+        in: body
+        name: musica
+        required: true
+        schema:
+          $ref: '#/definitions/entity.Musica'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Cria nova música
+      tags:
+      - musicas
+  /musicas/{id}:
+    delete:
+      description: Deleta uma música pelo ID
+      parameters:
+      - description: ID da música
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Remove uma música
+      tags:
+      - musicas
+    get:
+      description: Retorna uma música específica pelo ID
+      parameters:
+      - description: ID da música
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: Busca uma música por ID
+      tags:
+      - musicas
+schemes:
+- http
+swagger: "2.0"

@@ -1,0 +1,204 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "API REST para gerenciamento de músicas.",
+        "title": "API de Músicas (Ana)",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/musicas": {
+            "get": {
+                "description": "Retorna todas as músicas cadastradas",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "musicas"
+                ],
+                "summary": "Lista todas as músicas",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Criação de uma nova música",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "musicas"
+                ],
+                "summary": "Cria nova música",
+                "parameters": [
+                    {
+                        "description": "Música para criar",
+                        "name": "musica",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.Musica"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/musicas/{id}": {
+            "get": {
+                "description": "Retorna uma música específica pelo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "musicas"
+                ],
+                "summary": "Busca uma música por ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da música",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deleta uma música pelo ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "musicas"
+                ],
+                "summary": "Remove uma música",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "ID da música",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.Musica": {
+            "type": "object",
+            "properties": {
+                "album": {
+                    "type": "string"
+                },
+                "ano": {
+                    "type": "integer"
+                },
+                "artista": {
+                    "type": "string"
+                },
+                "duracao": {
+                    "type": "integer"
+                },
+                "genero": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "titulo": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "erro": {}
+            }
+        }
+    }
+}

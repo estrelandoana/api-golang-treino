@@ -11,6 +11,14 @@ import (
 	"gorm.io/gorm"
 )
 
+// GinListarMusicas godoc
+// @Summary      Lista todas as músicas
+// @Description  Retorna todas as músicas cadastradas
+// @Tags         musicas
+// @Produce      json
+// @Success      200  {object}  handler.Response
+// @Failure      500  {object}  handler.Response
+// @Router       /musicas [get]
 func GinListarMusicas(c *gin.Context) {
 	musicas, err := service.ListarMusicas()
 	if err != nil {
@@ -26,6 +34,17 @@ func GinListarMusicas(c *gin.Context) {
 	})
 }
 
+// GinCreateMusica godoc
+// @Summary      Cria nova música
+// @Description  Criação de uma nova música
+// @Tags         musicas
+// @Accept       json
+// @Produce      json
+// @Param        musica  body  entity.Musica  true  "Música para criar"
+// @Success      201  {object}  handler.Response
+// @Failure      400  {object}  handler.Response
+// @Failure      500  {object}  handler.Response
+// @Router       /musicas [post]
 func GinCreateMusica(c *gin.Context) {
 	var body entity.Musica
 	err := c.ShouldBindJSON(&body)
@@ -59,6 +78,16 @@ func GinCreateMusica(c *gin.Context) {
 	})
 }
 
+// GinGetMusica godoc
+// @Summary      Busca uma música por ID
+// @Description  Retorna uma música específica pelo ID
+// @Tags         musicas
+// @Produce      json
+// @Param        id   path      int  true  "ID da música"
+// @Success      200  {object}  handler.Response
+// @Failure      400  {object}  handler.Response
+// @Failure      404  {object}  handler.Response
+// @Router       /musicas/{id} [get]
 func GinGetMusica(c *gin.Context) {
 	idStr := c.Param("id")
 	idUint, err := strconv.ParseUint(idStr, 10, 64)
@@ -132,6 +161,17 @@ func GinUpdateMusica(c *gin.Context) {
 	})
 }
 
+// GinDeleteMusica godoc
+// @Summary      Remove uma música
+// @Description  Deleta uma música pelo ID
+// @Tags         musicas
+// @Produce      json
+// @Param        id   path  int  true  "ID da música"
+// @Success      204  {object}  nil
+// @Failure      400  {object}  handler.Response
+// @Failure      404  {object}  handler.Response
+// @Failure      500  {object}  handler.Response
+// @Router       /musicas/{id} [delete]
 func GinDeleteMusica(c *gin.Context) {
 	idStr := c.Param("id")
 	idUint, err := strconv.ParseUint(idStr, 10, 64)
