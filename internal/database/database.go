@@ -1,7 +1,8 @@
-package db
+package database
 
 import (
 	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -10,10 +11,10 @@ import (
 var DB *gorm.DB
 
 func ConectorDB() {
-	dsn := "host=localhost user=postgres password=postgres dbname=musicas port=5432 sslmode=disable"
+	dsn := os.Getenv("DB_DSN")
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Erro ao conectar ao banco: ", err)
+		log.Fatalf("Erro ao conectar no banco: %v", err)
 	}
 	DB = db
 }

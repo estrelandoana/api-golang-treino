@@ -1,12 +1,11 @@
 package main
 
 import (
+	"fmt"
+
 	_ "github.com/estrelandoana/api-golang-treino/docs"
-	"github.com/estrelandoana/api-golang-treino/internal/db"
-	"github.com/estrelandoana/api-golang-treino/internal/handler"
-	"github.com/gin-gonic/gin"
-	swaggerfiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/estrelandoana/api-golang-treino/internal/database"
+	"github.com/estrelandoana/api-golang-treino/internal/router"
 )
 
 // @title           API de Músicas (Ana)
@@ -16,17 +15,9 @@ import (
 // @BasePath        /api/v1
 // @schemes         http
 func main() {
-	db.ConectorDB()
-	r := gin.Default()
-
-	api := r.Group("/api/v1")
-	{
-		api.GET("/musicas", handler.GinListarMusicas)
-		api.POST("/musicas", handler.GinCreateMusica)
-		api.GET("/musicas/:id", handler.GinGetMusica)
-		api.PUT("/musicas/:id", handler.GinUpdateMusica)
-		api.DELETE("/musicas/:id", handler.GinDeleteMusica)
-	}
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
-	r.Run(":8080")
+	database.ConectorDB()
+	r := router.SetupRouter()
+	port := ":8080"
+	fmt.Printf("Rodando em http://localhost%s\n", port)
+	r.Run(port)
 }

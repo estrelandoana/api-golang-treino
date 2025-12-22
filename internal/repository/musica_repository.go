@@ -1,35 +1,33 @@
 package repository
 
 import (
-	"github.com/estrelandoana/api-golang-treino/internal/db"
+	"github.com/estrelandoana/api-golang-treino/internal/database"
 	"github.com/estrelandoana/api-golang-treino/internal/entity"
-	"gorm.io/gorm"
 )
+
+func CreateMusica(m entity.Musica) (entity.Musica, error) {
+	err := database.DB.Create(&m).Error
+	return m, err
+}
 
 func ListarMusicas() ([]entity.Musica, error) {
 	var musicas []entity.Musica
-	err := db.DB.Find(&musicas).Error
+	err := database.DB.Find(&musicas).Error
 	return musicas, err
 }
 
-func CreateMusica(musica entity.Musica) error {
-	return db.DB.Create(&musica).Error
-}
-
 func GetMusica(id uint) (entity.Musica, error) {
-	var musica entity.Musica
-	err := db.DB.First(&musica, id).Error
-	return musica, err
+	var m entity.Musica
+	err := database.DB.First(&m, id).Error
+	return m, err
 }
 
-func UpdateMusica(musica entity.Musica) error {
-	return db.DB.Save(&musica).Error
+func UpdateMusica(m entity.Musica) (entity.Musica, error) {
+	err := database.DB.Save(&m).Error
+	return m, err
 }
 
 func DeleteMusica(id uint) error {
-	result := db.DB.Delete(&entity.Musica{}, id)
-	if result.RowsAffected == 0 {
-		return gorm.ErrRecordNotFound
-	}
-	return result.Error
+	err := database.DB.Delete(&entity.Musica{}, id).Error
+	return err
 }
